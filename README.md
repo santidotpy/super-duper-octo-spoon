@@ -11,6 +11,8 @@ Desarrollo de un sistema de gestion de acciones.
 ```
 
 ## Endpoints
+> [!NOTE]
+> Modo puede ser: `ahora`, `principiodia` o `findia`
 
 ### Obtener todas las ordenes
 
