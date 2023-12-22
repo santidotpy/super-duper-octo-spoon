@@ -2,6 +2,8 @@
 
 Desarrollo de un sistema de gestion de acciones.
 
+![My Skills](https://skills.thijs.gg/icons?i=java,maven,react,docker,vscode)
+
 ## Correr el proyecto
 
 ```bash
