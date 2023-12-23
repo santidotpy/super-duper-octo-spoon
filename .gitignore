@@ -17,8 +17,6 @@ npm-debug.log.*
 Enunciado.pdf
 .yo-rc.json
 .yo-rc-global.json
-package.json
-package-lock.json
 
 ######################
 # SASS
