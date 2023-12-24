@@ -38,6 +38,12 @@ public class AnalizarService {
     @Autowired
     ColaFinDiaService colaFinDiaService;
 
+    public enum Modo {
+        PRINCIPIODIA,
+        FINDIA,
+        AHORA
+    }
+
     public void addOrdersToQueue(Modo modo) {
         if (modo == Modo.PRINCIPIODIA) {
             List<Orden> ordenes = ordenService.findOrdenesNullByModo(modo.name());
@@ -58,6 +64,14 @@ public class AnalizarService {
             }
             log.info(colaAhoraService.queueSize() + " orders added to AHORA queue");
         }
+    }
+
+    public void updatePrice(Orden orden) {
+       JsonNode ultimoValorNode = catedraService.getPrecio(orden);
+       if (ultimoValorNode != null) {
+           Double valor = ultimoValorNode.get("valor").asDouble();
+           orden.setPrecio(valor);
+       }
     }
 
     public boolean analizarHorario(Orden orden) {
@@ -138,20 +152,6 @@ public class AnalizarService {
         return ok;
     }
 
-    public void cambiarPrecio(Orden orden) {
-        JsonNode ultimoValorNode = catedraService.getPrecio(orden);
-        if (ultimoValorNode != null) {
-            Double valor = ultimoValorNode.get("valor").asDouble();
-            orden.setPrecio(valor);
-        }
-    }
-
-    public enum Modo {
-        PRINCIPIODIA,
-        FINDIA,
-        AHORA
-    }
-
     public Map<String, List<Orden>> analizarOrdenes(Modo modo) {
         log.info("Analizando ordenes con modo " + modo + " ...");
 
@@ -159,11 +159,15 @@ public class AnalizarService {
         List<Orden> aceptadas = new ArrayList<>();
         List<Orden> rechazadas = new ArrayList<>();
         addOrdersToQueue(modo);
-        
+
         List<Orden> ordenes = getElementsInQueue(modo);
         System.out.println(ordenes);
 
         for (Orden orden : ordenes) {
+            // if modo is not AHORA, update price
+            if (modo != Modo.AHORA) {
+                updatePrice(orden);
+            }
             procesarOrden(orden, aceptadas, rechazadas, modo);
         }
 
