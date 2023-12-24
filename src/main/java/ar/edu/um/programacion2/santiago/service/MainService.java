@@ -20,8 +20,9 @@ public class MainService {
 
     @Autowired
     ReportarService reportarService;
-
-    // schedule methods
+    
+    // cada 30 segundos entre las 9 y las 17
+    @Scheduled(cron = "0/30 9-17 * * * ?")
     public void exeRightNow() {
         obtenerService.obtenerOrdenes();
         analizarService.analizarOrdenes(AnalizarService.Modo.AHORA);
@@ -30,7 +31,7 @@ public class MainService {
     }
 
     // schedule methods diaria a la 9
-    // @Scheduled(cron = "0 0 9 * * *")
+    @Scheduled(cron = "0 0 9 * * *")
     public void exeEarlyBird() {
         obtenerService.obtenerOrdenes();
         analizarService.analizarOrdenes(AnalizarService.Modo.PRINCIPIODIA);
@@ -39,7 +40,7 @@ public class MainService {
     }
 
     // schedule methods diaria a la 18
-    // @Scheduled(cron = "0 0 18 * * *")
+    @Scheduled(cron = "0 0 18 * * *")
     public void exeNightOwl() {
         obtenerService.obtenerOrdenes();
         analizarService.analizarOrdenes(AnalizarService.Modo.FINDIA);
